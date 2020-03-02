@@ -2,30 +2,41 @@ export class Todo {
   completed: Boolean;
   editing: Boolean;
 
-  private _title: String;
-  get title() {
+  private _id: number;
+  private _title: string;
+
+  get title(): string {
     return this._title;
   }
 
-  set title(value: String) {
+  set title(value: string) {
     this._title = value.trim();
   }
 
-  constructor(title: String) {
-    this.completed = false;
-    this.editing = false;
+  get id(): number{
+    return this._id;
+  }
+
+  set id(id: number){
+    this._id = id;
+  }
+
+  constructor(id: number = null, title: string = '', completed: boolean= false, editing: boolean= false) {
+    this.completed = completed;
+    this.editing = editing;
     this.title = title.trim();
+    this.id = id;
   }
 }
 
 export class TodoStore {
-  todos: Array<Todo>;
+  private todos: Array<Todo>;
 
   constructor() {
     let persistedTodos = JSON.parse(localStorage.getItem('angular2-todos') || '[]');
     // Normalize back into classes
-    this.todos = persistedTodos.map((todo: { _title: String, completed: Boolean }) => {
-      let ret = new Todo(todo._title);
+    this.todos = persistedTodos.map((todo: { _title: string, completed: Boolean }) => {
+      let ret = new Todo(this.todos.length + 1, todo._title);
       ret.completed = todo.completed;
       return ret;
     });
@@ -39,6 +50,10 @@ export class TodoStore {
     return this.todos.filter((todo: Todo) => todo.completed === completed);
   }
 
+  all() {
+    return this.todos;
+  }
+
   allCompleted() {
     return this.todos.length === this.getCompleted().length;
   }
@@ -48,21 +63,29 @@ export class TodoStore {
     this.updateStore();
   }
 
-  removeCompleted() {
+  removeCompleted(): void {
     this.todos = this.getWithCompleted(false);
     this.updateStore();
   }
 
-  getRemaining() {
+  getRemaining(): Array<Todo> {
     return this.getWithCompleted(false);
   }
 
-  getCompleted() {
+  getCompleted(): Array<Todo> {
     return this.getWithCompleted(true);
+  }
+
+  getById(id: number): Todo{
+    return null;
   }
 
   toggleCompletion(todo: Todo) {
     todo.completed = !todo.completed;
+    this.updateStore();
+  }
+
+  removeById(id: number){
     this.updateStore();
   }
 
@@ -71,8 +94,21 @@ export class TodoStore {
     this.updateStore();
   }
 
-  add(title: String) {
-    this.todos.push(new Todo(title));
+  add(title: string) {
+    this.todos.push(new Todo(this.todos.length + 1, title));
     this.updateStore();
   }
+
+  addTodo(todo: Todo){
+    this.todos.push(todo);
+    this.updateStore();
+  }
+
+  updateTodo(id: number, title: string): Todo{
+    const todo: Todo = this.getById(id);
+    todo.title = title;
+    this.updateStore();
+    return todo;
+  }
+
 }
