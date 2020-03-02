@@ -1,27 +1,46 @@
-node_modules/.bin
+# See http://help.github.com/ignore-files/ for more about ignoring files.
 
-# ignore the source / documentation of each node module, but retain the
-# distribution builds
+# compiled output
+/dist
+/tmp
+/out-tsc
+# Only exists if Bazel was run
+/bazel-out
 
-node_modules/systemjs
-!node_modules/systemjs/dist/system.src.js
+# dependencies
+/node_modules
 
-node_modules/todomvc-app-css
-!node_modules/todomvc-app-css/index.css
+# profiling files
+chrome-profiler-events*.json
+speed-measure-plugin*.json
 
-node_modules/todomvc-common
-!node_modules/todomvc-common/base.css
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
 
-node_modules/angular2
-!node_modules/angular2/bundles/angular2-polyfills.js
-!node_modules/angular2/bundles/angular2.dev.js
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
 
-node_modules/rxjs
-!node_modules/rxjs/bundles/Rx.js
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
 
-# Ignore development dependencies
-node_modules/tsd
-node_modules/typescript
-
-*.js.map
-typings
+# System Files
+.DS_Store
+Thumbs.db
